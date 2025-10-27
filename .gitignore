@@ -1,0 +1,13 @@
+# macOS files
+.DS_Store
+
+# DS cache (project-specific)
+.ds_cache/
+
+# Byte-compiled / cache
+__pycache__/
+*.py[cod]
+
+# Virtual environments
+venv/
+env/
