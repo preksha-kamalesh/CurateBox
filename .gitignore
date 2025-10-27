@@ -1,8 +1,7 @@
-# macOS files
+# macOS Finder files everywhere
 .DS_Store
+**/.DS_Store
 
-# DS cache (project-specific)
-.ds_cache/
 
 # Byte-compiled / cache
 __pycache__/
