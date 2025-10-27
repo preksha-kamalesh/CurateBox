@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Manage Customers</h2>
+
+<!-- Customer Table -->
+<table border="1" cellpadding="10" cellspacing="0">
+    <tr>
+        <th>ID</th>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Email</th>
+        <th>Subscription Status</th>
+        <th>Actions</th>
+    </tr>
+    {% for c in customers %}
+    <tr>
+        <td>{{ c.customer_id }}</td>
+        <td>{{ c.first_name }}</td>
+        <td>{{ c.last_name }}</td>
+        <td>{{ c.email }}</td>
+        <td>{{ c.subscription_status }}</td>
+        <td>
+            <!-- Edit Button -->
+            <button class="edit-btn" data-customer='{{ c | tojson }}'>Edit</button>
+            <a href="{{ url_for('view_preferences', customer_id=c.customer_id) }}">View Preferences</a>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+<!-- Edit Customer Modal -->
+<div id="editModal" style="display:none;">
+    <h3>Edit Customer</h3>
+    <form id="editForm" method="POST">
+        <input type="text" name="first_name" id="edit_first" placeholder="First Name" required><br>
+        <input type="text" name="last_name" id="edit_last" placeholder="Last Name" required><br>
+        <input type="email" name="email" id="edit_email" placeholder="Email" required><br>
+        <select name="subscription_status" id="edit_status">
+            <option value="Active">Active</option>
+            <option value="Paused">Paused</option>
+            <option value="Cancelled">Cancelled</option>
+        </select><br>
+        <button type="submit">Save Changes</button>
+        <button type="button" id="cancelEdit">Cancel</button>
+    </form>
+</div>
+
+<script>
+const editModal = document.getElementById('editModal');
+const editForm = document.getElementById('editForm');
+const editFirst = document.getElementById('edit_first');
+const editLast = document.getElementById('edit_last');
+const editEmail = document.getElementById('edit_email');
+const editStatus = document.getElementById('edit_status');
+document.getElementById('cancelEdit').addEventListener('click', () => {
+    editModal.style.display = 'none';
+});
+
+// Handle all edit buttons
+document.querySelectorAll('.edit-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        const customer = JSON.parse(btn.dataset.customer);
+        editFirst.value = customer.first_name;
+        editLast.value = customer.last_name;
+        editEmail.value = customer.email;
+        editStatus.value = customer.subscription_status;
+        editForm.action = '/edit_customer/' + customer.customer_id;
+        editModal.style.display = 'block';
+    });
+});
+</script>
+{% endblock %}

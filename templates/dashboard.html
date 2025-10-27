@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block content %}
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    {% for category, message in messages %}
+      <div class="alert alert-{{ category }}">{{ message }}</div>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
+
+<h2>Welcome, {{ username }}!</h2>
+
+<div class="curation-card">
+  <h3>Monthly Box Curation</h3>
+  <p>Click below to generate and assign products for {{ month }}.</p>
+  <form action="{{ url_for('generate_boxes') }}" method="POST">
+    <button type="submit" class="generate-btn">Generate Boxes for {{ month }}</button>
+  </form>
+</div>
+
+
+<div class="stats">
+  <div class="stat-box">
+    <h4>Active Subscribers</h4>
+    <p>{{ active_subs }}</p>
+  </div>
+  <div class="stat-box">
+    <h4>Products Low on Stock</h4>
+    <p>{{ low_stock }}</p>
+  </div>
+  <div class="stat-box"> 
+    <h4>Boxes to Ship</h4>
+    <p>{{ pending_boxes }}</p>
+  </div>
+</div>
+{% endblock %}

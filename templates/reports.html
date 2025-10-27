@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Reports</h2>
+
+<!-- Section 1: Top Shipped Products -->
+<h3>Most Frequently Shipped Products</h3>
+<table border="1" cellpadding="10" cellspacing="0">
+    <tr>
+        <th>Product</th>
+        <th>Times Shipped</th>
+    </tr>
+    {% for p in top_products %}
+    <tr>
+        <td>{{ p.product_name }}</td>
+        <td>{{ p.times_shipped }}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+<hr>
+
+<!-- Section 2: Customer Order History -->
+<h3>Customer Order History</h3>
+<form method="POST" action="{{ url_for('reports') }}">
+    <input type="text" name="customer_name" placeholder="Enter first or last name" value="{{ search_name }}">
+    <button type="submit">Search</button>
+</form>
+
+{% if customer_history %}
+<table border="1" cellpadding="10" cellspacing="0">
+    <tr>
+        <th>Customer</th>
+        <th>Curation Date</th>
+        <th>Product</th>
+    </tr>
+    {% for ch in customer_history %}
+    <tr>
+        <td>{{ ch.first_name }} {{ ch.last_name }}</td>
+        <td>{{ ch.curation_date }}</td>
+        <td>{{ ch.product_name }}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endif %}
+
+<hr>
+
+<!-- Section 3: Products Safe for Nut Allergies -->
+<h3>Products Safe for Customers with Nut Allergies</h3>
+<table border="1" cellpadding="10" cellspacing="0">
+    <tr>
+        <th>Product</th>
+        <th>Category</th>
+    </tr>
+    {% for sp in safe_products %}
+    <tr>
+        <td>{{ sp.product_name }}</td>
+        <td>{{ sp.category }}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+{% endblock %}

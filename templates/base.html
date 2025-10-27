@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CurateBox Admin</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+{% if session.get('loggedin') %}
+<nav class="navbar">
+    <div class="logo">CurateBox Admin</div>
+    <ul class="nav-links">
+        <li><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
+        <li><a href="{{ url_for('products') }}">Products</a></li>
+        <li><a href="{{ url_for('customers') }}">Customers</a></li>
+        <li><a href="{{ url_for('reports') }}">Reports</a></li>
+
+    </ul>
+    <a href="{{ url_for('logout') }}" class="logout">Logout</a>
+</nav>
+{% endif %}
+
+<div class="content">
+    {% block content %}{% endblock %}
+</div>
+</body>
+</html>

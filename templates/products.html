@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Manage Products</h2>
+
+<!-- Add New Product Button -->
+<button id="addBtn">+ Add New Product</button>
+
+<!-- Product Table -->
+<table border="1" cellpadding="10" cellspacing="0">
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Category</th>
+        <th>Stock</th>
+        <th>Supplier</th>
+        <th>Actions</th>
+    </tr>
+    {% for p in products %}
+    <tr>
+        <td>{{ p.product_id }}</td>
+        <td>{{ p.product_name }}</td>
+        <td>{{ p.category }}</td>
+        <td {% if p.stock_quantity < 10 %} style="color:red;" {% endif %}>{{ p.stock_quantity }}</td>
+        <td>{{ p.supplier_name }}</td>
+        <td>
+            <!-- Edit Button -->
+            <button class="edit-btn" data-product='{{ p | tojson }}'>Edit</button>
+            <!-- Delete Button -->
+            <a href="{{ url_for('delete_product', product_id=p.product_id) }}" onclick="return confirm('Are you sure?')">Delete</a>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+<!-- Add Product Modal -->
+<div id="addModal" style="display:none;">
+    <h3>Add New Product</h3>
+    <form action="{{ url_for('add_product') }}" method="POST">
+        <input type="text" name="product_name" placeholder="Name" required><br>
+        <input type="text" name="category" placeholder="Category" required><br>
+        <input type="number" name="stock_quantity" placeholder="Stock" required><br>
+        <input type="number" name="supplier_id" placeholder="Supplier ID" required><br>
+        <button type="submit">Add Product</button>
+        <button type="button" id="cancelAdd">Cancel</button>
+    </form>
+</div>
+
+<!-- Edit Product Modal -->
+<div id="editModal" style="display:none;">
+    <h3>Edit Product</h3>
+    <form id="editForm" method="POST">
+        <input type="text" name="product_name" id="edit_name" required><br>
+        <input type="text" name="category" id="edit_category" required><br>
+        <input type="number" name="stock_quantity" id="edit_stock" required><br>
+        <input type="number" name="supplier_id" id="edit_supplier" required><br>
+        <button type="submit">Save Changes</button>
+        <button type="button" id="cancelEdit">Cancel</button>
+    </form>
+</div>
+
+<script>
+// Add Product Modal
+const addModal = document.getElementById('addModal');
+document.getElementById('addBtn').addEventListener('click', () => {
+    addModal.style.display = 'block';
+});
+document.getElementById('cancelAdd').addEventListener('click', () => {
+    addModal.style.display = 'none';
+});
+
+// Edit Product Modal
+const editModal = document.getElementById('editModal');
+const editForm = document.getElementById('editForm');
+const editName = document.getElementById('edit_name');
+const editCategory = document.getElementById('edit_category');
+const editStock = document.getElementById('edit_stock');
+const editSupplier = document.getElementById('edit_supplier');
+document.getElementById('cancelEdit').addEventListener('click', () => {
+    editModal.style.display = 'none';
+});
+
+// Handle all edit buttons
+document.querySelectorAll('.edit-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        const product = JSON.parse(btn.dataset.product);
+        editName.value = product.product_name;
+        editCategory.value = product.category;
+        editStock.value = product.stock_quantity;
+        editSupplier.value = product.supplier_id || 1;
+        editForm.action = '/edit_product/' + product.product_id;
+        editModal.style.display = 'block';
+    });
+});
+</script>
+
+{% endblock %}

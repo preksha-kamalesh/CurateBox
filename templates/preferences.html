@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Preferences for {{ customer.first_name }} {{ customer.last_name }}</h2>
+
+<table border="1" cellpadding="10" cellspacing="0">
+    <tr>
+        <th>Category</th>
+        <th>Preference</th>
+        <th>Like / Dislike</th>
+    </tr>
+    {% for p in preferences %}
+    <tr>
+        <td>{{ p.category }}</td>
+        <td>{{ p.preference_value }}</td>
+        <td>{{ 'Like' if p.is_like == 1 else 'Dislike' }}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+<a href="{{ url_for('customers') }}">Back to Customers</a>
+{% endblock %}
